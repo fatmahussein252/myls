@@ -46,6 +46,9 @@ void print_inode(int terminal_width, int entries_count, int max_len,
 	if (type == 'd')
 	    printf("%7li \033[1;34m%-*s\033[0m", inodes[i],
 		   (int) (max_len + 2), files[i]);
+	else if(type == 'x')
+	    printf("%7li \033[1;32m%-*s\033[0m", inodes[i],
+		   (int) (max_len + 2), files[i]);
 	else
 	    printf("%7li %-*s", inodes[i], (int) (max_len + 2), files[i]);
 	if ((i + 1) % (int) cols == 0) {
@@ -354,6 +357,15 @@ void l_option(int show_hidden, char **args_only, int args_count)
 }
 
 void sort_options(int args_count, int show_hidden, char **args_only)
+{
+    CheckNoArg(args_count, show_hidden);
+    for (int i = 1; i < args_count; i++) {
+	printf("Directory listing of %s:\n", args_only[i]);
+	do_ls(args_only[i], show_hidden);
+    }
+}
+
+void oneline_option(int args_count, int show_hidden, char **args_only)
 {
     CheckNoArg(args_count, show_hidden);
     for (int i = 1; i < args_count; i++) {
