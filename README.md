@@ -39,7 +39,7 @@ Then execute the program using:
 
 ![image](https://github.com/user-attachments/assets/89f8544d-080b-40ab-9afd-87edbb3f9012)
 
-video showing output: https://drive.google.com/file/d/1dkU7ZiTVUYYCNpOrhlbI6ZwkZBYkJ53p/view?usp=drive_link
+video showing output: [https://drive.google.com/file/d/1dkU7ZiTVUYYCNpOrhlbI6ZwkZBYkJ53p/view?usp=drive_link](https://drive.google.com/file/d/1UclV2qAD6Cfjj_hotE7LXxPz6Msw84S5/view?usp=drive_link)
 
 
   
