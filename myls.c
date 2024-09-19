@@ -53,6 +53,8 @@ void print_in_columns(char **files, int entries_count, int terminal_width,
 	    type = get_type(files[i], dir_path);
 	    if (type == 'd')
 		printf("\033[1;34m%-*s\033[0m", max_len + 2, files[i]);
+	    else if(type == 'x')
+	        printf("\033[1;32m%-*s\033[0m", max_len + 2, files[i]);
 	    else
 		printf("%-*s", max_len + 2, files[i]);
 	    if ((i + 1) % (int) cols == 0) {
@@ -81,6 +83,11 @@ char get_type(char *entry, char *dir_path)
     switch (mode & S_IFMT) {
     case S_IFDIR:
 	return 'd';
+    case S_IFREG:
+	{
+	if ((mode & S_IXUSR) == S_IXUSR || (mode & S_IXGRP) == S_IXGRP || (mode & S_IXOTH) == S_IXOTH)
+	return 'x';  
+	}
     }
 }
 
@@ -281,7 +288,8 @@ void HandleOpt(char **argv, int args_count, int argc, int show_hidden,
 	}
 	if (strchr(opts, 't') || strchr(opts, 'c') || strchr(opts, 'u'))
 	    sort_options(args_count, show_hidden, args_only);
-
+	if(strchr(opts, '1'))
+            oneline_option(args_count, show_hidden, args_only);
     }
 
 }
