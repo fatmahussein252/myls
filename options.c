@@ -44,7 +44,7 @@ void print_inode(int terminal_width, int entries_count, int max_len,
     for (int i = 0; i < entries_count; i++) {
 	type = get_type(files[i], dir_path);
 	if (type == 'd')
-	    printf("%7li \033[0;32m%-*s\033[0m", inodes[i],
+	    printf("%7li \033[1;34m%-*s\033[0m", inodes[i],
 		   (int) (max_len + 2), files[i]);
 	else
 	    printf("%7li %-*s", inodes[i], (int) (max_len + 2), files[i]);
@@ -82,10 +82,10 @@ void d_option(int args_count, int show_hidden, char **args_only)
 	} else {
 	    for (int i = 1; i < args_count; i++) {
 		if (strchr(opts, '1') != NULL)
-		    printf("%li %s\n", get_ino(args_only[i]),
+		    printf("%li \033[1;34m%s\033[0m\n", get_ino(args_only[i]),
 			   args_only[i]);
 		else
-		    printf("%7li %-*s", get_ino(args_only[i]),
+		    printf("%7li \033[1;34m%-*s\033[0m", get_ino(args_only[i]),
 			   (int) sizeof(args_only[i]), args_only[i]);
 	    }
 	    printf("\n\n");
@@ -97,9 +97,9 @@ void d_option(int args_count, int show_hidden, char **args_only)
 	else {
 	    for (int i = 1; i < args_count; i++) {
 		if (strchr(opts, '1') != NULL)
-		    printf("%s\n", args_only[i]);
+		    printf("\033[1;34m%s\033[0m\n", args_only[i]);
 		else
-		    printf("%-*s", (int) sizeof(args_only[i]),
+		    printf("\033[1;34m%-*s\033[0m", (int) sizeof(args_only[i]),
 			   args_only[i]);
 	    }
 	    printf("\n\n");

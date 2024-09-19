@@ -52,7 +52,7 @@ void print_in_columns(char **files, int entries_count, int terminal_width,
 	for (int i = 0; i < entries_count; i++) {
 	    type = get_type(files[i], dir_path);
 	    if (type == 'd')
-		printf("\033[0;32m%-*s\033[0m", max_len + 2, files[i]);
+		printf("\033[1;34m%-*s\033[0m", max_len + 2, files[i]);
 	    else
 		printf("%-*s", max_len + 2, files[i]);
 	    if ((i + 1) % (int) cols == 0) {
