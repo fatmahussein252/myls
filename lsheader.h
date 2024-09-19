@@ -39,4 +39,5 @@ void print_l_columns(char *entries[], int entries_count, long inodes[],
 		     char *permissions[], long links[], char *user_name[],
 		     char *grp_name[], long blksize[], char *str_time[]);
 void sort_options(int args_count, int show_hidden, char **args_only);
+void oneline_option(int args_count, int show_hidden, char **args_only);
 char get_type(char *entry, char *dir_path);
