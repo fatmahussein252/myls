@@ -9,16 +9,16 @@ specified.
 - `-u` : with `-lt` :  sort by, and show, access time; with `-l`: show access
               time and sort by name; otherwise: sort by  access  time,  newest
               first.
-- `c` :  with `-lt` : sort by, and show, ctime (time of last modification of
+- `-c` :  with `-lt` : sort by, and show, ctime (time of last modification of
               file status information); with `-l`: show ctime and sort by  name;
               otherwise: sort by ctime, newest first.
 
 if more than one sorting option were given, `-u` and `-c` have higher priority than `-t` , if both were given, sort by last one.
 
-- `i` : show inode number.
-- `f` : do not sort, enable `-a`, disable `-l` if `-i` not spicified.
-- `d` : list directories themselves, not their contents. this option has highest priority.
-- `1` : list one file per line.
+- `-i` : show inode number.
+- `-f` : do not sort, enable `-a`, disable `-l` if `-i` not spicified.
+- `-d` : list directories themselves, not their contents. this option has highest priority.
+- `-1` : list one file per line.
 
 ### other features
 - List entries of more than one directory.
