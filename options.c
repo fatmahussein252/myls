@@ -10,6 +10,7 @@
 #include<sys/stat.h>
 #include "lsheader.h"
 #include <limits.h>
+
 extern char *opts;
 
 // function to handle '-a' option 
