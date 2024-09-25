@@ -9,7 +9,10 @@
 #include <time.h>
 #include<sys/stat.h>
 #include "lsheader.h"
+#include <limits.h>
+extern char *opts;
 
+// function to handle '-a' option 
 void a_option(int show_hidden, int args_count, char **args_only)
 {
     CheckNoArg(args_count, show_hidden);
@@ -19,7 +22,7 @@ void a_option(int show_hidden, int args_count, char **args_only)
     }
 
 }
-
+// function to handle '-i' option 
 void i_option(int show_hidden, int args_count, char **args_only)
 {
     CheckNoArg(args_count, show_hidden);
@@ -29,7 +32,7 @@ void i_option(int show_hidden, int args_count, char **args_only)
     }
 
 }
-
+// function print the entries with inode number
 void print_inode(int terminal_width, int entries_count, int max_len,
 		 char **files, long inodes[], char *dir_path)
 {
@@ -57,7 +60,7 @@ void print_inode(int terminal_width, int entries_count, int max_len,
     }
     printf("\n\n");
 }
-
+// function to get the inode number
 long int get_ino(char *dir_path)
 {
     struct dirent *entry;
@@ -76,7 +79,7 @@ long int get_ino(char *dir_path)
 	return entry->d_ino;
     }
 }
-
+// function to handle the '-d' option.
 void d_option(int args_count, int show_hidden, char **args_only)
 {
     if (strchr(opts, 'i') != NULL) {
@@ -110,7 +113,7 @@ void d_option(int args_count, int show_hidden, char **args_only)
     }
 
 }
-
+// function to get group name from group id.
 void get_grp_name(long unsigned grp_id, char **grp_name)
 {
     errno = 0;
@@ -126,7 +129,7 @@ void get_grp_name(long unsigned grp_id, char **grp_name)
 	*grp_name = strdup(grp->gr_name);
 
 }
-
+// function to get the user name from user id.
 void get_user_name(long unsigned user_id, char **user_name)
 {
     errno = 0;
@@ -141,13 +144,13 @@ void get_user_name(long unsigned user_id, char **user_name)
 	*user_name = strdup(pwd->pw_name);
 
 }
-
+// function to get contents of the inode.
 void get_inode_data(long links[], char *user_name[], char *grp_name[],
 		    long blksize[], char *str_time[], int entries_count,
 		    char *entries[], const char *arg)
 {
     struct stat buf;
-    char entrypath[200] = { 0 };
+    char entrypath[PATH_MAX] = { 0 };
     long time[5000];
 
     for (int i = 0; i < entries_count; i++) {
@@ -180,7 +183,7 @@ void get_inode_data(long links[], char *user_name[], char *grp_name[],
 	strtok(str_time[i], "\n");
     }
 }
-
+// function to get the path of each file name.
 void get_path(char *entrypath, const char *arg, char *entry)
 {
     strcpy(entrypath, arg);
@@ -188,12 +191,12 @@ void get_path(char *entrypath, const char *arg, char *entry)
     strncat(entrypath, entry, strlen(entry));
 
 }
-
+// function to get the permissions of each file.
 void get_permission(char *permissions[], char *entries[],
 		    int entries_count, const char *arg)
 {
     struct stat buf;
-    char entrypath[200] = { 0 };
+    char entrypath[PATH_MAX] = { 0 };
     int mode = 0;
     char *str;
     for (int i = 0; i < entries_count; i++) {
@@ -249,7 +252,7 @@ void get_permission(char *permissions[], char *entries[],
     }
 }
 
-
+// function to print the entries in long format.
 void print_l_columns(char *entries[], int entries_count, long inodes[],
 		     char *permissions[], long links[], char *user_name[],
 		     char *grp_name[], long blksize[], char *str_time[])
@@ -284,10 +287,10 @@ void print_l_columns(char *entries[], int entries_count, long inodes[],
     printf("\n");
 
 }
-
+// function to list with long format for each given path.
 void l_option_WithArg(char **args_only, int args_count, int show_hidden)
 {
-    char *entries[5000] = { NULL };
+    char **entries = NULL;
     long inodes[5000];
     int entries_count = 0;
     char *permissions[5000] = { NULL };
@@ -300,7 +303,7 @@ void l_option_WithArg(char **args_only, int args_count, int show_hidden)
     for (int i = 1; i < args_count; i++) {
 
 	entries_count =
-	    get_dir_entries(entries, inodes, args_only[i], show_hidden);
+	    get_dir_entries(&entries, inodes, args_only[i], show_hidden);
 	if (!strchr(opts, 't'))
 	    sort_alpha(entries, entries_count, inodes);	// sort alphapetically
 	else
@@ -316,10 +319,10 @@ void l_option_WithArg(char **args_only, int args_count, int show_hidden)
 			user_name, grp_name, blksize, str_time);
     }
 }
-
+// function to list with long format for the cwd.
 void l_option_NoArg(int show_hidden)
 {
-    char *entries[5000] = { NULL };
+    char **entries =  NULL;
     long inodes[5000];
     int entries_count = 0;
     char *permissions[5000] = { NULL };
@@ -329,12 +332,12 @@ void l_option_NoArg(int show_hidden)
     long blksize[5000];
     char *str_time[5000] = { NULL };
 
-    entries_count = get_dir_entries(entries, inodes, ".", show_hidden);
+    entries_count = get_dir_entries(&entries, inodes, ".", show_hidden); // get entries
     if (!strchr(opts, 't'))
-	sort_alpha(entries, entries_count, inodes);	// sort alphapetically
+	sort_alpha(entries, entries_count, inodes);	              // sort alphapetically if '-t' not specified
     else
-	get_sort_time(entries, entries_count, inodes, ".");
-    get_permission(permissions, entries, entries_count, ".");
+	get_sort_time(entries, entries_count, inodes, ".");           // sort by time
+    get_permission(permissions, entries, entries_count, ".");          
     get_inode_data(links, user_name, grp_name, blksize, str_time,
 		   entries_count, entries, ".");
     printf("Directory listing of cwd:\n");
@@ -342,20 +345,20 @@ void l_option_NoArg(int show_hidden)
 		    user_name, grp_name, blksize, str_time);
 
 }
-
+// function to handle '-l' optoin
 void l_option(int show_hidden, char **args_only, int args_count)
 {
     if (strchr(opts, 'a') != NULL)
 	show_hidden = 1;
     if (args_count == 1) {
-	l_option_NoArg(show_hidden);
+	l_option_NoArg(show_hidden); // list with long format for the cwd
     } else {
 	l_option_WithArg(args_only, args_count, show_hidden);
     }
 
 
 }
-
+// function to handle sorting options
 void sort_options(int args_count, int show_hidden, char **args_only)
 {
     CheckNoArg(args_count, show_hidden);
@@ -364,7 +367,7 @@ void sort_options(int args_count, int show_hidden, char **args_only)
 	do_ls(args_only[i], show_hidden);
     }
 }
-
+// function to handle '-1' option
 void oneline_option(int args_count, int show_hidden, char **args_only)
 {
     CheckNoArg(args_count, show_hidden);
